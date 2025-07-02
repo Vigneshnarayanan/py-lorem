@@ -1,9 +1,11 @@
-# .buildkite/pipeline.yml
 steps:
   - label: ":docker: Run loremipsum.sentence()"
     plugins:
       - docker#v5.9.0:
           image: "python:3.13"
+          workdir: "/workdir"
+          volumes:
+            - ".:/workdir"
     commands:
       - echo "--- Installing py-lorem"
       - pip install .
@@ -17,6 +19,9 @@ steps:
     plugins:
       - docker#v5.9.0:
           image: "python:3.13"
+          workdir: "/workdir"
+          volumes:
+            - ".:/workdir"
     commands:
       - echo "--- Installing py-lorem"
       - pip install .
