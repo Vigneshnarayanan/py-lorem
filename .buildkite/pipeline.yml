@@ -1,11 +1,5 @@
 steps:
-  - label: ":docker: Run loremipsum.sentence()"
-    plugins:
-      - docker#v5.9.0:
-          image: "python:3.13"
-          workdir: "/workdir"
-          volumes:
-            - ".:/workdir"
+  - label: ":python: Run loremipsum.sentence()"
     commands:
       - echo "--- Installing py-lorem"
       - pip install .
@@ -14,14 +8,8 @@ steps:
       - cat result.txt
       - buildkite-agent annotate "Sentence: $(cat result.txt)"
 
-  - label: ":docker: Run loremipsum.paragraph()"
+  - label: ":python: Run loremipsum.paragraph()"
     if: "build.state == \"passed\""
-    plugins:
-      - docker#v5.9.0:
-          image: "python:3.13"
-          workdir: "/workdir"
-          volumes:
-            - ".:/workdir"
     commands:
       - echo "--- Installing py-lorem"
       - pip install .
