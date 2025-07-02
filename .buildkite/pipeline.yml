@@ -1,0 +1,26 @@
+# .buildkite/pipeline.yml
+steps:
+  - label: ":docker: Run loremipsum.sentence()"
+    plugins:
+      - docker#v5.9.0:
+          image: "python:3.13"
+    commands:
+      - echo "--- Installing py-lorem"
+      - pip install .
+      - echo "--- Running loremipsum.sentence"
+      - python -c "import loremipsum; print(loremipsum.sentence(max_char=20))" > result.txt
+      - cat result.txt
+      - buildkite-agent annotate "Sentence: $(cat result.txt)"
+
+  - label: ":docker: Run loremipsum.paragraph()"
+    if: "build.state == \"passed\""
+    plugins:
+      - docker#v5.9.0:
+          image: "python:3.13"
+    commands:
+      - echo "--- Installing py-lorem"
+      - pip install .
+      - echo "--- Running loremipsum.paragraph"
+      - python -c "import loremipsum; print(loremipsum.paragraph(max_char=100))" > result2.txt
+      - cat result2.txt
+      - buildkite-agent annotate "Paragraph: $(cat result2.txt)"
